@@ -58,7 +58,9 @@ for run_dir in run_dirs:
         run_log[run_number]['begin'] = start_time
         run_log[run_number]['end'] = end_time
 
-json_filename = '{path}/run_log.json'.format(path=args.path)
+prog_dir = '/'.join(os.path.realpath(__file__).split('/')[:-1])
+
+json_filename = '{path}/run_log.json'.format(path=prog_dir)
 f = open(json_filename, 'w')
 dump(run_log, f, indent=2, sort_keys=True)
 f.truncate()
