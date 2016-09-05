@@ -4,6 +4,7 @@
 # --------------------------------------------------------
 
 from datetime import datetime
+from matplotlib import dates
 try:
     import termcolor
 except ImportError:
@@ -50,6 +51,33 @@ def load_resolution():
         return 1000
 
 
+def execute(cmd, args, ex=None):
+    ex = args if ex is None else ex
+    args = [args] if (type(args) is not list and type(args) is not dict) else args
+    if type(args) is list:
+        cmd(*args) if ex is not None else do_nothing()
+    else:
+        cmd(**args) if ex is not None else do_nothing()
+
+
+def format_yaxis(ax, tit=None, ran=None, size=12, col=None, grid=None):
+    execute(ax.set_ylabel, {'ylabel': tit, 'color': col if col is not None else 'black', 'size': size}, tit)
+    execute(ax.set_ylim, ran)
+    for tl in ax.get_yticklabels():
+        execute(tl.set_color, col)
+    execute(ax.grid, [grid, 'major', 'y'], grid)
+
+
+def format_xaxis(ax, tit=None, ran=None, size=12, col=None, grid=None, time=None):
+    execute(ax.set_xlabel, {'xlabel': tit, 'color': col if col is not None else 'black', 'size': size}, tit)
+    execute(ax.set_xlim, ran)
+    for tl in ax.get_xticklabels():
+        execute(tl.set_color, col)
+    execute(ax.grid, [grid, 'major', 'x'], grid)
+    execute(ax.xaxis.set_major_formatter, time)
+    execute(ax.xaxis.set_major_locator, dates.MinuteLocator(interval=30), time)
+
+
 def make_transparent(pad):
     pad.SetFillStyle(4000)
     pad.SetFillColor(0)
@@ -58,49 +86,6 @@ def make_transparent(pad):
 
 def do_nothing():
     pass
-
-
-def format_histo(histo, name='', title='', x_tit='', y_tit='', marker=20, color=1, markersize=1., x_off=None, y_off=None, lw=1, fill_color=0,
-                 stats=True, tit_size=.04, x_range=None, y_range=None, do_marker=True, style=None):
-    h = histo
-    h.SetTitle(title) if title else h.SetTitle(h.GetTitle())
-    h.SetName(name) if name else h.SetName(h.GetName())
-    try:
-        h.SetStats(stats)
-    except AttributeError or ReferenceError:
-        pass
-    # markers
-    try:
-        if do_marker:
-            h.SetMarkerStyle(marker) if marker is not None else do_nothing()
-            h.SetMarkerColor(color) if color is not None else do_nothing()
-            h.SetMarkerSize(markersize) if markersize is not None else do_nothing()
-    except AttributeError or ReferenceError:
-        pass
-    # lines/fill
-    try:
-        h.SetLineColor(color) if color is not None else h.SetLineColor(h.GetLineColor())
-        h.SetFillColor(fill_color)
-        h.SetLineWidth(lw)
-        h.SetFillStyle(style) if style is not None else do_nothing()
-    except AttributeError or ReferenceError:
-        pass
-    # axis titles
-    try:
-        x_axis = h.GetXaxis()
-        if x_axis:
-            x_axis.SetTitle(x_tit) if x_tit else h.GetXaxis().GetTitle()
-            x_axis.SetTitleOffset(x_off) if x_off is not None else do_nothing()
-            x_axis.SetTitleSize(tit_size)
-            x_axis.SetRangeUser(x_range[0], x_range[1]) if x_range is not None else do_nothing()
-        y_axis = h.GetYaxis()
-        if y_axis:
-            y_axis.SetTitle(y_tit) if y_tit else y_axis.GetTitle()
-            y_axis.SetTitleOffset(y_off) if y_off is not None else do_nothing()
-            y_axis.SetTitleSize(tit_size)
-            y_axis.SetRangeUser(y_range[0], y_range[1]) if y_range is not None else do_nothing()
-    except AttributeError or ReferenceError:
-        pass
 
 
 def make_run_string(run1, run2):
