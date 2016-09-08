@@ -21,7 +21,8 @@ def log_warning(msg):
 
 
 def convert_time(t):
-    return datetime.strptime(t, '%a %b %d %H:%M:%S %Y')
+    t = ' '.join(t.split(' ')[1:])
+    return datetime.strptime(str(t), '%b %d %H:%M:%S %Y')
 
 
 def print_banner(msg, symbol='='):
