@@ -66,7 +66,7 @@ def format_yaxis(ax, tit=None, ran=None, size=12, col=None, grid=None):
     execute(ax.set_ylim, ran)
     for tl in ax.get_yticklabels():
         execute(tl.set_color, col)
-    execute(ax.grid, [grid, 'major', 'y'], grid)
+    execute(ax.grid, grid)
 
 
 def format_xaxis(ax, tit=None, ran=None, size=12, col=None, grid=None, time=None):
@@ -74,7 +74,7 @@ def format_xaxis(ax, tit=None, ran=None, size=12, col=None, grid=None, time=None
     execute(ax.set_xlim, ran)
     for tl in ax.get_xticklabels():
         execute(tl.set_color, col)
-    execute(ax.grid, [grid, 'major', 'x'], grid)
+    execute(ax.grid, grid)
     execute(ax.xaxis.set_major_formatter, time)
     execute(ax.xaxis.set_major_locator, dates.MinuteLocator(interval=30), time)
 
