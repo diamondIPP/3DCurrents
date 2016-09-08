@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib import ticker
 from ConfigParser import ConfigParser
 from numpy import array
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from Utils import *
 
 # ====================================
@@ -342,12 +342,12 @@ class Currents:
 
 
 if __name__ == "__main__":
-    pars = ArgumentParser()
-    pars.add_argument('start_run', nargs='?', default='22008')
-    pars.add_argument('end_run', nargs='?', default='')
-    pars.add_argument('-l', '--runlog', nargs='?', default='run_log.json')
-    pars.add_argument('-d', '--data', nargs='?', default='HV_CERN_08_2016')
-    pars.add_argument('-v', '--verbose', default=False, action='store_true')
+    pars = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+    pars.add_argument('start_run', nargs='?', default='22008', help='start run to look at')
+    pars.add_argument('end_run', nargs='?', default='', help='end run to look at, leave blank if you only want to look at a single run')
+    pars.add_argument('-l', '--runlog', nargs='?', default='run_log.json', help='full path of the run_log.json file created by createRunList.py script (if not already in the program directory!)')
+    pars.add_argument('-d', '--data', nargs='?', default='HV_CERN_08_2016', help='full path of hv data directory')
+    pars.add_argument('-v', '--verbose', default=False, action='store_true', help='activate verbosity')
     args = pars.parse_args()
     print args
     end_run = args.end_run if args.end_run else args.start_run
