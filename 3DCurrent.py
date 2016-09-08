@@ -270,12 +270,13 @@ class Currents:
 
     def make_graphs(self):
         d = self.ActiveDevice['dia']
-        fig, ax1 = plt.subplots(figsize=(15, 10), dpi=100)
+        fig = plt.figure(figsize=(15, 10), dpi=100)
         fig.suptitle('Currents of the {dia} for run {r}'.format(dia=self.ActiveDevice['dia'], r=make_run_string(self.StartRun, self.EndRun)), size=20)
         t = dates.date2num(array(self.Time[d]))
         current = array(self.Currents[d])
 
-        ax1.plot_date(t, current, 'b.-', xdate=True)
+        plt.plot_date(t, current, 'b.-', xdate=True)
+        ax1 = fig.get_axes()[0]
         m = self.Margins[d]
         format_yaxis(ax1, 'Current [nA]', col='b', ran=m['y'], size=20, grid=True)
         format_xaxis(ax1, 'Time [hh:mm]', ran=m['x'], size=20, grid=True, time=dates.DateFormatter('%H:%M'))
@@ -345,7 +346,7 @@ if __name__ == "__main__":
     pars.add_argument('start_run', nargs='?', default='22008')
     pars.add_argument('end_run', nargs='?', default='')
     pars.add_argument('-l', '--runlog', nargs='?', default='run_log.json')
-    pars.add_argument('-d', '--data', nargs='?', default='HV_DATA')
+    pars.add_argument('-d', '--data', nargs='?', default='HV_CERN_08_2016')
     pars.add_argument('-v', '--verbose', default=False, action='store_true')
     args = pars.parse_args()
     print args

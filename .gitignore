@@ -1,4 +1,5 @@
 *pyc
 *run_log.json
-*HV_DATA
+HV_DATA/
+HV_CERN*
 *.idea/
