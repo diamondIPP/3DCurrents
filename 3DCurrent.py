@@ -4,7 +4,6 @@
 # created on September 4th 2016 by M. Reichmann (remichae@phys.ethz.ch)
 # --------------------------------------------------------
 
-from datetime import datetime
 from glob import glob
 from time import sleep
 from json import load
@@ -17,7 +16,6 @@ from ConfigParser import ConfigParser
 from numpy import array
 from argparse import ArgumentParser
 from Utils import *
-
 
 # ====================================
 # CONSTANTS
@@ -87,11 +85,11 @@ class Currents:
         if self.Verbose:
             t = datetime.now().strftime('%H:%M:%S')
             print 'INFO: {t} --> {msg}'.format(t=t, msg=msg)
-            
+
     def load_logdir(self, logdir):
         n_dirs = len(logdir.split('/'))
         return '{dir}/{logs}'.format(dir=self.Dir, logs=logdir) if n_dirs == 1 else logdir
-    
+
     def load_datadir(self, data_dir):
         n_dirs = len(data_dir.split('/'))
         return '{dir}/{data}'.format(dir=self.Dir, data=data_dir) if n_dirs == 1 else data_dir
@@ -129,7 +127,11 @@ class Currents:
         return devices
 
     def create_data_path(self):
-        return {key: '{data}/{dev}_{ch}/'.format(data=self.DataDir, dev=dic['name'], ch=dic['ch']) for key, dic in self.Devices.iteritems()}
+        data_dic = {}
+        for key, dic in self.Devices.iteritems():
+            data_dic[key] = '{data}/{dev}_{ch}/'.format(data=self.DataDir, dev=dic['name'], ch=dic['ch'])
+        return data_dic
+
     # endregion
 
     def reset_data(self, device):
@@ -146,7 +148,7 @@ class Currents:
     # ==========================================================================
     # region ACQUIRE DATA
     def get_logs_from_start(self, device):
-        log_names = sorted([name for name in glob(self.DataPaths[device] + '*')])
+        log_names = sorted(glob(self.DataPaths[device] + '*'))
         start_log = None
         for i, name in enumerate(log_names):
             log_date = self.get_log_date(name)
